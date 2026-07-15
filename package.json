@@ -1,0 +1,9 @@
+{
+  "name": "atelier-noir",
+  "private": true,
+  "version": "1.0.0",
+  "description": "ATELIER NOIR storefront (static) + Vercel serverless functions for Stripe checkout.",
+  "dependencies": {
+    "stripe": "^16.12.0"
+  }
+}
