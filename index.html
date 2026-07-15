@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATELIER NOIR — Considered clothing, made to last</title>
+<meta name="description" content="ATELIER NOIR is a premium clothing house for men, women, kids and accessories. Shop new arrivals, best sellers and seasonal edits.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          ink:    '#0B0B0A',
+          paper:  '#F8F6F1',
+          paperd: '#121210',
+          gold:   '#B8935A',
+          goldd:  '#8A6A3B',
+          char:   '#2B2A28',
+          stone:  '#8C8880',
+          hair:   '#DEDACF',
+          haird:  '#2A2823',
+        },
+        fontFamily: {
+          display: ['"Bodoni Moda"', 'Georgia', 'serif'],
+          body: ['Inter', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root{ --thread: 0.6s; }
+  *{ scroll-behavior:smooth; }
+  body{ background:#F8F6F1; color:#2B2A28; font-family:'Inter',sans-serif; }
+  html.dark body{ background:#0B0B0A; color:#EDEAE2; }
+  .font-display{ font-family:'Bodoni Moda', Georgia, serif; }
+  ::selection{ background:#B8935A; color:#0B0B0A; }
+
+  /* thread underline — signature motif */
+  .thread{ position:relative; display:inline-block; }
+  .thread::after{
+    content:''; position:absolute; left:0; bottom:-4px; height:1px; width:0;
+    background:#B8935A; transition:width var(--thread) cubic-bezier(.16,1,.3,1);
+  }
+  .thread:hover::after, .thread.active::after{ width:100%; }
+
+  .hairline{ border-color:#DEDACF; }
+  html.dark .hairline{ border-color:#2A2823; }
+
+  .btn-gold{
+    background:#0B0B0A; color:#F8F6F1; border:1px solid #0B0B0A;
+    letter-spacing:.08em; transition:all .35s ease; position:relative; overflow:hidden;
+  }
+  .btn-gold:hover{ background:#B8935A; border-color:#B8935A; color:#0B0B0A; }
+  html.dark .btn-gold{ background:#B8935A; border-color:#B8935A; color:#0B0B0A; }
+  html.dark .btn-gold:hover{ background:#F8F6F1; border-color:#F8F6F1; }
+
+  .btn-outline{
+    background:transparent; border:1px solid #0B0B0A; color:#0B0B0A; letter-spacing:.08em; transition:all .3s ease;
+  }
+  .btn-outline:hover{ background:#0B0B0A; color:#F8F6F1; }
+  html.dark .btn-outline{ border-color:#EDEAE2; color:#EDEAE2; }
+  html.dark .btn-outline:hover{ background:#EDEAE2; color:#0B0B0A; }
+
+  .prod-img{ transition: transform 1s cubic-bezier(.16,1,.3,1), filter .6s ease; filter:grayscale(.15) contrast(1.02); }
+  .prod-card:hover .prod-img{ transform:scale(1.045); }
+  .prod-card:hover .prod-img-alt{ opacity:1; }
+  .prod-img-alt{ opacity:0; transition:opacity .5s ease; }
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  input[type=range]{ accent-color:#B8935A; }
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-thumb{ background:#DEDACF; }
+  html.dark ::-webkit-scrollbar-thumb{ background:#2A2823; }
+
+  .skeleton{ background:linear-gradient(100deg,#EFEBE1 30%,#F8F6F1 50%,#EFEBE1 70%); background-size:200% 100%; animation:shimmer 1.4s infinite; }
+  @keyframes shimmer{ to{ background-position:-200% 0; } }
+
+  .focus-ring:focus-visible{ outline:2px solid #B8935A; outline-offset:2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  .toast{ transform:translateY(120%); transition:transform .4s cubic-bezier(.16,1,.3,1); }
+  .toast.show{ transform:translateY(0); }
+
+  [x-cloak]{ display:none !important; }
+
+  .qty-input::-webkit-inner-spin-button{ -webkit-appearance:none; }
+
+  .zoom-wrap{ overflow:hidden; cursor:zoom-in; }
+  .zoom-img{ transition:transform .25s ease; }
+  .zoom-wrap:hover .zoom-img{ transform:scale(1.6); }
+</style>
+</head>
+<body class="font-body antialiased">
+
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:z-[100] focus:top-2 focus:left-2 focus:bg-ink focus:text-paper focus:px-4 focus:py-2 focus:text-sm">Skip to content</a>
+
+<div id="nav-root"></div>
+<main id="main"><div id="app" class="min-h-[60vh]"></div></main>
+<div id="footer-root"></div>
+<div id="toast" class="toast fixed bottom-5 left-1/2 -translate-x-1/2 z-[90] bg-ink text-paper text-sm px-5 py-3 tracking-wide flex items-center gap-3 shadow-xl"></div>
+
+<script type="module">
+/* =========================================================================
+   FIREBASE INIT — fill in your project config below.
+   Firebase Console → Project settings → General → Your apps → Web app.
+   Also enable: Authentication → Sign-in method → Email/Password, and
+   create a Firestore database (production mode), then deploy the rules
+   in firestore.rules from this project's output folder.
+   ========================================================================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword,
+  createUserWithEmailAndPassword, signOut, updateProfile
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, setDoc, collection, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+let fbApp, fbAuth, fbDb, fbEnabled = false;
+try {
+  fbApp = initializeApp(firebaseConfig);
+  fbAuth = getAuth(fbApp);
+  fbDb = getFirestore(fbApp);
+  fbEnabled = firebaseConfig.apiKey !== "YOUR_API_KEY";
+} catch (e) {
+  console.warn('Firebase not initialized — check firebaseConfig.', e);
+}
+
+window.fb = {
+  enabled: fbEnabled, auth: fbAuth, db: fbDb,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile,
+  doc, getDoc, setDoc, collection, serverTimestamp
+};
+
+if (fbEnabled) {
+  onAuthStateChanged(fbAuth, (user) => {
+    window.dispatchEvent(new CustomEvent('fb-auth-changed', { detail: user }));
+  });
+} else {
+  console.warn('ATELIER NOIR: Firebase config is still using placeholder values. Auth/cart persistence will run in local-only demo mode until you add your project keys near the top of the <script type="module"> block.');
+}
+</script>
+
+<script type="module">
+/* =========================================================================
+   ATELIER NOIR — single-file demo storefront + admin shell
+   No build step. Tailwind via CDN. Vanilla JS hash router.
+   Auth, cart and wishlist persist to Firebase/Firestore when configured
+   above; otherwise everything runs in-memory so the site still works
+   standalone. Stripe checkout posts to /api/create-checkout-session and
+   /api/verify-session (see the api/ folder) — those only work once
+   deployed to Vercel with STRIPE_SECRET_KEY set.
+   ========================================================================= */
+
+/* ---------------------------- DATA ---------------------------- */
+const CATEGORIES = ['Men','Women','Kids','Accessories'];
+const COLORS = ['Black','Ivory','Camel','Olive','Charcoal','Gold'];
+const SIZE_SETS = {
+  apparel: ['XS','S','M','L','XL','XXL'],
+  kids: ['2-3Y','4-5Y','6-7Y','8-9Y','10-11Y'],
+  access: ['One Size']
+};
+const BRANDS = ['Atelier Noir','Noir Studio','La Maison'];
+
+function img(seed, w=900, h=1125){ return `https://picsum.photos/seed/${seed}/${w}/${h}`; }
+
+const NAMES = {
+  Men: ['Tailored Wool Overcoat','Merino Crewneck Sweater','Slim Oxford Shirt','Pleated Trousers','Cashmere Turtleneck','Structured Bomber Jacket','Selvedge Denim Jean','Silk-Blend Bomber','Double-Breasted Blazer','Cotton Twill Chino'],
+  Women: ['Silk Wrap Blouse','Wool Midi Coat','Draped Satin Dress','Tailored Trouser Suit','Cashmere Wrap Cardigan','Pleated Midi Skirt','Silk Slip Dress','Belted Trench Coat','Ribbed Knit Bodysuit','Linen Shirt Dress'],
+  Kids: ['Cotton Knit Sweater','Corduroy Overalls','Wool-Blend Peacoat','Organic Cotton Tee Set','Quilted Puffer Vest','Pleated Party Dress'],
+  Accessories: ['Leather Belt','Silk Twill Scarf','Structured Tote Bag','Cashmere Beanie','Leather Card Holder','Gold-Tone Cufflinks','Leather Ankle Boot','Aviator Sunglasses']
+};
+
+const REVIEW_POOL = [
+  {name:'Amara O.', text:'The fabric is heavier than I expected in the best way. Fits true to size and the stitching detail on the cuffs is a nice touch.', rating:5},
+  {name:'Daniel K.', text:'Runs slightly large so I would size down. The colour in person is richer than the photos show.', rating:4},
+  {name:'Priya S.', text:'Ordered this for a work trip and it packed without a single crease. Genuinely impressed with the finish.', rating:5},
+  {name:'Tunde A.', text:'Good piece overall, took about a week longer to arrive than the estimate but customer care was responsive.', rating:4},
+  {name:'Grace L.', text:'This is my third order from Atelier Noir and the quality has been consistent every time.', rating:5},
+  {name:'Michael B.', text:'Nice weight to the material, lining feels durable. Would like a couple more colour options.', rating:4},
+];
+
+function buildProducts(){
+  let id = 1; const list = [];
+  Object.entries(NAMES).forEach(([cat, names])=>{
+    names.forEach((name, i)=>{
+      const gender = cat;
+      const sizeSet = cat==='Kids' ? SIZE_SETS.kids : (cat==='Accessories' ? SIZE_SETS.access : SIZE_SETS.apparel);
+      const price = cat==='Accessories' ? (40 + (i*17)%160) : (85 + (i*23)%260);
+      const onSale = (id % 5 === 0);
+      const isNew = (id % 4 === 0);
+      const isBest = (id % 3 === 0);
+      const stock = (id % 7 === 0) ? 0 : (3 + (id*13)%40);
+      const colors = COLORS.filter((_,ci)=> (id+ci)%3!==0).slice(0,3);
+      const reviews = [REVIEW_POOL[id%REVIEW_POOL.length], REVIEW_POOL[(id+2)%REVIEW_POOL.length]];
+      const rating = (reviews.reduce((s,r)=>s+r.rating,0)/reviews.length);
+      list.push({
+        id, sku:`AN-${1000+id}`, name, category:cat, gender, brand: BRANDS[id%BRANDS.length],
+        price, compareAt: onSale ? Math.round(price*1.35) : null,
+        sizes:sizeSet, colors, stock, isNew, isBest, onSale,
+        rating: Math.round(rating*10)/10, reviewsCount: 24 + (id*7)%180,
+        images:[img('an'+id+'a'), img('an'+id+'b')],
+        description:`A considered piece cut from responsibly sourced material, finished by hand in our workshop. The ${name.toLowerCase()} is built for repeat wear across seasons — pair it back with the rest of the ${cat.toLowerCase()} edit.`,
+        reviews
+      });
+      id++;
+    });
+  });
+  return list;
+}
+const PRODUCTS = buildProducts();
+
+/* ---------------------------- STATE ---------------------------- */
+const STATE = {
+  cart: [],        // {productId, size, color, qty}
+  wishlist: [],     // productIds
+  user: null,       // {name, email}
+  dark: false,
+  toastTimer: null,
+};
+
+/* ---------------------------- BACKEND HOOKS ----------------------------
+   Firebase/Firestore-backed when window.fb.enabled is true (real config
+   supplied above); otherwise falls back to local-only demo behaviour so
+   the site keeps working before you've set up a project. Every place in
+   the UI that mutates cart/wishlist/auth/orders calls through here. */
+const STORE = {
+  async signIn(email, pass){
+    if(!window.fb.enabled){ const u={uid:'local-'+email, name:email.split('@')[0], email}; STATE.user=u; return u; }
+    const cred = await window.fb.signInWithEmailAndPassword(window.fb.auth, email, pass);
+    return cred.user;
+  },
+  async register(name, email, pass){
+    if(!window.fb.enabled){ const u={uid:'local-'+email, name, email}; STATE.user=u; return u; }
+    const cred = await window.fb.createUserWithEmailAndPassword(window.fb.auth, email, pass);
+    await window.fb.updateProfile(cred.user, { displayName: name });
+    await window.fb.setDoc(window.fb.doc(window.fb.db, 'users', cred.user.uid), { name, email, createdAt: window.fb.serverTimestamp() });
+    return cred.user;
+  },
+  async signOut(){
+    if(window.fb.enabled) await window.fb.signOut(window.fb.auth);
+    STATE.user = null;
+  },
+  async loadCart(uid){
+    if(!window.fb.enabled) return [];
+    const snap = await window.fb.getDoc(window.fb.doc(window.fb.db,'carts',uid));
+    return snap.exists() ? (snap.data().items || []) : [];
+  },
+  async saveCart(uid, items){
+    if(!window.fb.enabled) return;
+    try{ await window.fb.setDoc(window.fb.doc(window.fb.db,'carts',uid), { items, updatedAt: window.fb.serverTimestamp() }); }
+    catch(e){ console.warn('Could not save cart to Firestore:', e.message); }
+  },
+  async loadWishlist(uid){
+    if(!window.fb.enabled) return [];
+    const snap = await window.fb.getDoc(window.fb.doc(window.fb.db,'wishlists',uid));
+    return snap.exists() ? (snap.data().productIds || []) : [];
+  },
+  async saveWishlist(uid, productIds){
+    if(!window.fb.enabled) return;
+    try{ await window.fb.setDoc(window.fb.doc(window.fb.db,'wishlists',uid), { productIds, updatedAt: window.fb.serverTimestamp() }); }
+    catch(e){ console.warn('Could not save wishlist to Firestore:', e.message); }
+  },
+  async placeOrder(order){
+    const id = 'AN-'+Math.floor(100000+Math.random()*900000);
+    const full = { ...order, id, status: order.status || 'Processing', uid: STATE.user?.uid || null, placedAt: new Date().toISOString() };
+    if(window.fb.enabled){
+      try{ await window.fb.setDoc(window.fb.doc(window.fb.db,'orders', id), { ...full, createdAt: window.fb.serverTimestamp() }); }
+      catch(e){ console.warn('Order not saved to Firestore (check config/rules):', e.message); }
+    }
+    return full;
+  },
+};
+
+async function onUserSignedIn(fbUser){
+  STATE.user = { uid: fbUser.uid, name: fbUser.displayName || fbUser.email.split('@')[0], email: fbUser.email };
+  const [remoteCart, remoteWishlist] = await Promise.all([ STORE.loadCart(fbUser.uid), STORE.loadWishlist(fbUser.uid) ]);
+  // merge any guest-session items with what's saved to the account
+  remoteCart.forEach(ri=>{
+    const existing = STATE.cart.find(i=>i.productId===ri.productId && i.size===ri.size && i.color===ri.color);
+    if(existing) existing.qty = Math.max(existing.qty, ri.qty); else STATE.cart.push(ri);
+  });
+  remoteWishlist.forEach(id=>{ if(!STATE.wishlist.includes(id)) STATE.wishlist.push(id); });
+  await Promise.all([ STORE.saveCart(fbUser.uid, STATE.cart), STORE.saveWishlist(fbUser.uid, STATE.wishlist) ]);
+  renderNav();
+  go(location.hash);
+}
+function onUserSignedOut(){
+  STATE.user = null; STATE.cart = []; STATE.wishlist = [];
+  renderNav(); go(location.hash);
+}
+window.addEventListener('fb-auth-changed', (e)=>{ if(e.detail) onUserSignedIn(e.detail); else onUserSignedOut(); });
+/* ------------------------------------------------------------------------ */
+
+const fmt = (n)=> '$' + n.toFixed(2);
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(STATE.toastTimer);
+  STATE.toastTimer = setTimeout(()=> t.classList.remove('show'), 2400);
+}
+function cartCount(){ return STATE.cart.reduce((s,i)=>s+i.qty,0); }
+function cartTotal(){ return STATE.cart.reduce((s,i)=>{ const p=PRODUCTS.find(p=>p.id===i.productId); return s + (p.onSale?p.price:p.price) * i.qty; },0); }
+function findProduct(id){ return PRODUCTS.find(p=>p.id===+id); }
+
+function persistCart(){ if(STATE.user) STORE.saveCart(STATE.user.uid, STATE.cart); }
+function persistWishlist(){ if(STATE.user) STORE.saveWishlist(STATE.user.uid, STATE.wishlist); }
+
+function addToCart(productId, size, color, qty=1){
+  const existing = STATE.cart.find(i=>i.productId===productId && i.size===size && i.color===color);
+  if(existing) existing.qty += qty; else STATE.cart.push({productId, size, color, qty});
+  renderNav(); persistCart();
+  toast('Added to bag');
+}
+function removeFromCart(idx){ STATE.cart.splice(idx,1); renderNav(); persistCart(); go(location.hash); }
+function updateCartQty(idx, qty){ if(qty<1) return; STATE.cart[idx].qty = qty; renderNav(); persistCart(); go(location.hash); }
+function toggleWishlist(productId){
+  const i = STATE.wishlist.indexOf(productId);
+  if(i>-1){ STATE.wishlist.splice(i,1); toast('Removed from wishlist'); } else { STATE.wishlist.push(productId); toast('Saved to wishlist'); }
+  renderNav(); persistWishlist();
+}
+
+/* ---------------------------- NAV / FOOTER ---------------------------- */
+function renderNav(){
+  const root = document.getElementById('nav-root');
+  const linkClass = (href)=> `thread text-[13px] tracking-[.12em] uppercase ${location.hash===href?'active':''}`;
+  root.innerHTML = `
+  <header class="sticky top-0 z-50 backdrop-blur bg-paper/90 dark:bg-ink/90 border-b hairline">
+    <div class="hidden md:flex justify-center gap-8 py-1.5 text-[11px] tracking-[.15em] uppercase text-stone border-b hairline">
+      <span>Complimentary shipping over $150</span><span>·</span><span>30-day returns</span>
+    </div>
+    <div class="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between h-16 md:h-20">
+      <button id="mnav-toggle" class="md:hidden focus-ring p-2 -ml-2" aria-label="Open menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.4"/></svg>
+      </button>
+      <a href="#/home" class="font-display text-xl md:text-2xl tracking-[.18em] font-semibold select-none">ATELIER NOIR</a>
+      <nav class="hidden md:flex items-center gap-7">
+        <a href="#/shop" class="${linkClass('#/shop')}">Shop</a>
+        <a href="#/category/Women" class="${linkClass('#/category/Women')}">Women</a>
+        <a href="#/category/Men" class="${linkClass('#/category/Men')}">Men</a>
+        <a href="#/category/Kids" class="${linkClass('#/category/Kids')}">Kids</a>
+        <a href="#/category/Accessories" class="${linkClass('#/category/Accessories')}">Accessories</a>
+        <a href="#/new-arrivals" class="${linkClass('#/new-arrivals')}">New</a>
+        <a href="#/sale" class="${linkClass('#/sale')} text-goldd dark:text-gold">Sale</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <button id="search-toggle" class="focus-ring p-1.5" aria-label="Search">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.4"/></svg>
+        </button>
+        <button id="dark-toggle" class="hidden md:inline-flex focus-ring p-1.5" aria-label="Toggle dark mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z" stroke="currentColor" stroke-width="1.4"/></svg>
+        </button>
+        <a href="#/account" class="focus-ring p-1.5" aria-label="Account">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 20c1.6-3.6 4.6-5.5 7.5-5.5s5.9 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.4"/></svg>
+        </a>
+        <a href="#/wishlist" class="relative focus-ring p-1.5" aria-label="Wishlist">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.6-9.7-9A5.3 5.3 0 0112 6.5 5.3 5.3 0 0121.7 11c-2.2 4.4-9.7 9-9.7 9z" stroke="currentColor" stroke-width="1.4"/></svg>
+          ${STATE.wishlist.length? `<span class="absolute -top-1 -right-1 bg-gold text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">${STATE.wishlist.length}</span>`:''}
+        </a>
+        <a href="#/cart" class="relative focus-ring p-1.5" aria-label="Cart">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M6 8h12l-1 12H7L6 8z" stroke="currentColor" stroke-width="1.4"/><path d="M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.4"/></svg>
+          ${cartCount()? `<span class="absolute -top-1 -right-1 bg-ink dark:bg-gold text-paper dark:text-ink text-[10px] w-4 h-4 rounded-full flex items-center justify-center">${cartCount()}</span>`:''}
+        </a>
+      </div>
+    </div>
+    <div id="search-bar" class="hidden border-t hairline px-5 md:px-8 py-3">
+      <input id="search-input" type="search" placeholder="Search products…" class="w-full max-w-2xl mx-auto block bg-transparent border-b hairline py-2 font-display text-lg focus-ring outline-none" />
+    </div>
+    <div id="mnav" class="hidden md:hidden border-t hairline px-5 py-4 flex flex-col gap-4 text-sm uppercase tracking-widest">
+      <a href="#/shop">Shop</a><a href="#/category/Women">Women</a><a href="#/category/Men">Men</a><a href="#/category/Kids">Kids</a><a href="#/category/Accessories">Accessories</a><a href="#/new-arrivals">New Arrivals</a><a href="#/best-sellers">Best Sellers</a><a href="#/sale">Sale</a>
+    </div>
+  </header>`;
+
+  document.getElementById('mnav-toggle').onclick = ()=> document.getElementById('mnav').classList.toggle('hidden');
+  document.getElementById('search-toggle').onclick = ()=>{ document.getElementById('search-bar').classList.toggle('hidden'); document.getElementById('search-input').focus(); };
+  document.getElementById('dark-toggle').onclick = ()=>{ STATE.dark=!STATE.dark; document.documentElement.classList.toggle('dark', STATE.dark); };
+  document.getElementById('search-input').addEventListener('keydown', (e)=>{ if(e.key==='Enter' && e.target.value.trim()){ location.hash = '#/search/'+encodeURIComponent(e.target.value.trim()); document.getElementById('search-bar').classList.add('hidden'); }});
+}
+
+function renderFooter(){
+  document.getElementById('footer-root').innerHTML = `
+  <footer class="mt-24 bg-ink text-paper">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 py-16 grid md:grid-cols-5 gap-10">
+      <div class="md:col-span-2">
+        <div class="font-display text-xl tracking-[.18em] mb-4">ATELIER NOIR</div>
+        <p class="text-sm text-white/60 max-w-xs leading-relaxed">Considered clothing for men, women and kids, cut from honest material and made to be worn for years, not seasons.</p>
+        <div class="flex gap-4 mt-6">
+          ${['Instagram','Pinterest','TikTok'].map(s=>`<a href="#" class="thread text-[12px] tracking-widest uppercase text-white/70 hover:text-gold">${s}</a>`).join('')}
+        </div>
+      </div>
+      <div><div class="text-[11px] tracking-[.2em] uppercase text-gold mb-4">Shop</div>
+        <ul class="space-y-2 text-sm text-white/70">
+          <li><a href="#/category/Women" class="hover:text-gold">Women</a></li>
+          <li><a href="#/category/Men" class="hover:text-gold">Men</a></li>
+          <li><a href="#/category/Kids" class="hover:text-gold">Kids</a></li>
+          <li><a href="#/category/Accessories" class="hover:text-gold">Accessories</a></li>
+          <li><a href="#/sale" class="hover:text-gold">Sale</a></li>
+        </ul>
+      </div>
+      <div><div class="text-[11px] tracking-[.2em] uppercase text-gold mb-4">Help</div>
+        <ul class="space-y-2 text-sm text-white/70">
+          <li><a href="#/contact" class="hover:text-gold">Contact Us</a></li>
+          <li><a href="#/faq" class="hover:text-gold">FAQ</a></li>
+          <li><a href="#/order-tracking" class="hover:text-gold">Track Order</a></li>
+          <li><a href="#/faq" class="hover:text-gold">Shipping &amp; Returns</a></li>
+        </ul>
+      </div>
+      <div><div class="text-[11px] tracking-[.2em] uppercase text-gold mb-4">Company</div>
+        <ul class="space-y-2 text-sm text-white/70">
+          <li><a href="#/about" class="hover:text-gold">About Us</a></li>
+          <li><a href="#/admin" class="hover:text-gold">Admin</a></li>
+          <li><a href="#" class="hover:text-gold">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-gold">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 px-5 md:px-8 py-6 text-[11px] tracking-widest uppercase text-white/40 flex flex-col md:flex-row gap-2 justify-between max-w-7xl mx-auto">
+      <span>© 2026 Atelier Noir. All rights reserved.</span>
+      <span>Payments secured via Stripe, PayPal, Flutterwave &amp; Paystack</span>
+    </div>
+  </footer>`;
+}
+
+/* ---------------------------- SHARED COMPONENTS ---------------------------- */
+function stars(rating){
+  const full = Math.round(rating);
+  return `<span class="text-gold text-sm" aria-label="${rating} out of 5 stars">${'★'.repeat(full)}${'☆'.repeat(5-full)}</span>`;
+}
+
+function productCard(p, view='grid'){
+  const wished = STATE.wishlist.includes(p.id);
+  if(view==='list'){
+    return `
+    <div class="prod-card flex gap-5 border-b hairline py-6">
+      <a href="#/product/${p.id}" class="w-32 md:w-44 aspect-[4/5] overflow-hidden shrink-0 bg-hair/40">
+        <img src="${p.images[0]}" alt="${p.name}" loading="lazy" class="prod-img w-full h-full object-cover">
+      </a>
+      <div class="flex-1 min-w-0 flex flex-col">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <a href="#/product/${p.id}" class="font-display text-lg thread">${p.name}</a>
+            <div class="text-xs text-stone uppercase tracking-widest mt-1">${p.category} · ${p.brand}</div>
+          </div>
+          <button data-wish="${p.id}" class="focus-ring shrink-0" aria-label="Toggle wishlist">${wished?'♥':'♡'}</button>
+        </div>
+        <div class="mt-2">${stars(p.rating)} <span class="text-xs text-stone">(${p.reviewsCount})</span></div>
+        <p class="text-sm text-stone mt-2 line-clamp-2 max-w-xl">${p.description}</p>
+        <div class="mt-auto flex items-center gap-3 pt-3">
+          <span class="font-display text-lg">${fmt(p.price)}</span>
+          ${p.compareAt?`<span class="text-sm text-stone line-through">${fmt(p.compareAt)}</span>`:''}
+          ${p.stock===0?'<span class="text-xs uppercase tracking-widest text-stone">Sold out</span>':''}
+        </div>
+      </div>
+    </div>`;
+  }
+  return `
+  <div class="prod-card reveal group">
+    <a href="#/product/${p.id}" class="relative block aspect-[4/5] overflow-hidden bg-hair/40">
+      <img src="${p.images[0]}" alt="${p.name}" loading="lazy" class="prod-img absolute inset-0 w-full h-full object-cover">
+      <img src="${p.images[1]}" alt="" loading="lazy" class="prod-img prod-img-alt absolute inset-0 w-full h-full object-cover">
+      <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+        ${p.isNew?'<span class="bg-ink text-paper text-[10px] tracking-widest uppercase px-2 py-1">New</span>':''}
+        ${p.onSale?'<span class="bg-gold text-ink text-[10px] tracking-widest uppercase px-2 py-1">Sale</span>':''}
+        ${p.stock===0?'<span class="bg-paper text-ink text-[10px] tracking-widest uppercase px-2 py-1 border hairline">Sold out</span>':''}
+      </div>
+      <button data-wish="${p.id}" aria-label="Toggle wishlist" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-paper/90 flex items-center justify-center text-base focus-ring">${wished?'♥':'♡'}</button>
+    </a>
+    <div class="mt-3">
+      <a href="#/product/${p.id}" class="font-display text-[15px] thread">${p.name}</a>
+      <div class="text-[11px] text-stone uppercase tracking-widest mt-0.5">${p.category}</div>
+      <div class="flex items-center gap-2 mt-1.5">
+        <span class="text-sm">${fmt(p.price)}</span>
+        ${p.compareAt?`<span class="text-xs text-stone line-through">${fmt(p.compareAt)}</span>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function bindWishButtons(scope=document){
+  scope.querySelectorAll('[data-wish]').forEach(btn=>{
+    btn.onclick = (e)=>{ e.preventDefault(); toggleWishlist(+btn.dataset.wish); go(location.hash); };
+  });
+}
+
+function revealOnScroll(){
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:.12});
+  els.forEach(el=>io.observe(el));
+}
+
+function sectionHeading(eyebrow, title, cta){
+  return `
+  <div class="flex items-end justify-between mb-8 md:mb-10">
+    <div>
+      <div class="text-[11px] tracking-[.25em] uppercase text-gold mb-2">${eyebrow}</div>
+      <h2 class="font-display text-3xl md:text-4xl">${title}</h2>
+    </div>
+    ${cta?`<a href="${cta.href}" class="thread hidden md:inline text-[13px] tracking-widest uppercase">${cta.label}</a>`:''}
+  </div>`;
+}
+
+/* ---------------------------- PAGES ---------------------------- */
+
+function pageHome(){
+  const featured = PRODUCTS.filter(p=>p.isBest).slice(0,4);
+  const news = PRODUCTS.filter(p=>p.isNew).slice(0,8);
+  const bestsellers = PRODUCTS.filter(p=>p.isBest).slice(0,8);
+  const sale = PRODUCTS.filter(p=>p.onSale).slice(0,4);
+  return `
+  <section class="relative min-h-[86vh] md:min-h-[92vh] flex items-center border-b hairline overflow-hidden">
+    <div class="absolute inset-0 grid md:grid-cols-2">
+      <div></div>
+      <div class="relative">
+        <img src="${img('hero-main',1400,1700)}" class="absolute inset-0 w-full h-full object-cover grayscale-[.2]" alt="Model wearing the Atelier Noir autumn edit">
+        <div class="absolute inset-0 bg-gradient-to-l from-transparent md:from-transparent to-paper/0 md:hidden bg-black/30"></div>
+      </div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-5 md:px-8 w-full py-24 md:py-0">
+      <div class="max-w-lg bg-paper/85 md:bg-transparent p-6 md:p-0 backdrop-blur md:backdrop-blur-0">
+        <div class="text-[11px] tracking-[.3em] uppercase text-gold mb-4">The Autumn Edit — 02</div>
+        <h1 class="font-display text-5xl md:text-6xl leading-[1.05] mb-6">Quiet luxury,<br>cut to last.</h1>
+        <p class="text-stone text-base md:text-lg max-w-md mb-8 leading-relaxed">Considered silhouettes in wool, silk and organic cotton. Made in small runs, finished by hand, built to outlast the season.</p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#/shop" class="btn-gold px-8 py-3.5 text-sm inline-block focus-ring">Shop Now</a>
+          <a href="#/new-arrivals" class="btn-outline px-8 py-3.5 text-sm inline-block focus-ring">New Arrivals</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
+    ${sectionHeading('Shop by category','Featured Collections')}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      ${CATEGORIES.map((c,i)=>`
+        <a href="#/category/${c}" class="reveal group relative block aspect-[3/4] overflow-hidden bg-hair/40">
+          <img src="${img('cat-'+c,700,900)}" alt="${c}" loading="lazy" class="prod-img w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/0"></div>
+          <span class="absolute bottom-4 left-4 text-paper font-display text-xl thread">${c}</span>
+        </a>`).join('')}
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28 border-t hairline">
+    ${sectionHeading('Just landed','New Arrivals', {href:'#/new-arrivals', label:'View all'})}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10">${news.map(p=>productCard(p)).join('')}</div>
+  </section>
+
+  <section class="bg-ink text-paper py-20 md:py-28 border-t hairline">
+    <div class="max-w-7xl mx-auto px-5 md:px-8">
+      <div class="text-[11px] tracking-[.25em] uppercase text-gold mb-2">Loved by our community</div>
+      <h2 class="font-display text-3xl md:text-4xl mb-10">Best Sellers</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10">
+        ${bestsellers.map(p=>`
+        <div class="reveal">
+          <a href="#/product/${p.id}" class="block aspect-[4/5] overflow-hidden bg-white/5 mb-3">
+            <img src="${p.images[0]}" alt="${p.name}" loading="lazy" class="prod-img w-full h-full object-cover">
+          </a>
+          <a href="#/product/${p.id}" class="font-display thread text-[15px]">${p.name}</a>
+          <div class="text-sm text-white/60 mt-1">${fmt(p.price)}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  ${sale.length?`
+  <section class="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
+    ${sectionHeading('Limited time', 'Seasonal Offers', {href:'#/sale', label:'Shop sale'})}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10">${sale.map(p=>productCard(p)).join('')}</div>
+  </section>`:''}
+
+  <section class="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28 border-t hairline">
+    ${sectionHeading('In their words','What Our Customers Say')}
+    <div class="grid md:grid-cols-3 gap-8">
+      ${REVIEW_POOL.slice(0,3).map(r=>`
+      <div class="reveal border hairline p-6">
+        ${stars(r.rating)}
+        <p class="font-display text-lg leading-relaxed mt-3">"${r.text}"</p>
+        <div class="text-xs uppercase tracking-widest text-stone mt-4">${r.name}, Verified Buyer</div>
+      </div>`).join('')}
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28 border-t hairline">
+    ${sectionHeading('@ateliernoir','Follow Along')}
+    <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+      ${[1,2,3,4,5,6].map(i=>`<a href="#" class="reveal group relative aspect-square overflow-hidden block bg-hair/40">
+        <img src="${img('insta'+i,400,400)}" alt="Instagram post ${i}" loading="lazy" class="prod-img w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center text-paper opacity-0 group-hover:opacity-100 text-xl">♡</div>
+      </a>`).join('')}
+    </div>
+  </section>
+
+  <section class="bg-ink text-paper py-20 border-t hairline">
+    <div class="max-w-2xl mx-auto px-5 text-center">
+      <div class="text-[11px] tracking-[.25em] uppercase text-gold mb-3">Stay in touch</div>
+      <h2 class="font-display text-3xl md:text-4xl mb-4">Join the list</h2>
+      <p class="text-white/60 mb-8">Early access to new arrivals, private sales and 10% off your first order.</p>
+      <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <label for="nl-email" class="sr-only">Email address</label>
+        <input id="nl-email" required type="email" placeholder="Email address" class="flex-1 bg-transparent border border-white/25 px-4 py-3 text-sm focus-ring outline-none placeholder:text-white/40">
+        <button class="btn-gold px-6 py-3 text-sm focus-ring">Subscribe</button>
+      </form>
+    </div>
+  </section>`;
+}
+
+function filterBar(context){
+  const {category, gender} = context;
+  return `
+  <div class="border-b hairline">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 py-4 flex flex-wrap items-center gap-3 justify-between">
+      <div class="flex flex-wrap gap-2 text-xs">
+        <button data-sort-toggle class="border hairline px-3 py-2 uppercase tracking-widest flex items-center gap-2 focus-ring">Filter <svg width="12" height="12" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" fill="none"/></svg></button>
+        <select id="sort-select" class="border hairline px-3 py-2 uppercase tracking-widest bg-paper dark:bg-ink focus-ring">
+          <option value="newest">Sort: Newest</option>
+          <option value="popular">Popularity</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Top Rated</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="view-grid" aria-label="Grid view" class="p-1.5 border hairline focus-ring"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" stroke="currentColor"/><rect x="13" y="3" width="8" height="8" stroke="currentColor"/><rect x="3" y="13" width="8" height="8" stroke="currentColor"/><rect x="13" y="13" width="8" height="8" stroke="currentColor"/></svg></button>
+        <button id="view-list" aria-label="List view" class="p-1.5 border hairline focus-ring"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="3" stroke="currentColor"/><rect x="3" y="10.5" width="18" height="3" stroke="currentColor"/><rect x="3" y="17" width="18" height="3" stroke="currentColor"/></svg></button>
+      </div>
+    </div>
+    <div id="filter-panel" class="hidden max-w-7xl mx-auto px-5 md:px-8 pb-6 grid sm:grid-cols-2 md:grid-cols-5 gap-6 text-sm">
+      <div>
+        <div class="uppercase text-[11px] tracking-widest text-stone mb-2">Category</div>
+        ${CATEGORIES.map(c=>`<label class="flex items-center gap-2 mb-1.5"><input type="checkbox" class="f-cat" value="${c}"> ${c}</label>`).join('')}
+      </div>
+      <div>
+        <div class="uppercase text-[11px] tracking-widest text-stone mb-2">Size</div>
+        ${SIZE_SETS.apparel.map(s=>`<label class="flex items-center gap-2 mb-1.5"><input type="checkbox" class="f-size" value="${s}"> ${s}</label>`).join('')}
+      </div>
+      <div>
+        <div class="uppercase text-[11px] tracking-widest text-stone mb-2">Colour</div>
+        ${COLORS.map(c=>`<label class="flex items-center gap-2 mb-1.5"><input type="checkbox" class="f-color" value="${c}"> ${c}</label>`).join('')}
+      </div>
+      <div>
+        <div class="uppercase text-[11px] tracking-widest text-stone mb-2">Brand</div>
+        ${BRANDS.map(b=>`<label class="flex items-center gap-2 mb-1.5"><input type="checkbox" class="f-brand" value="${b}"> ${b}</label>`).join('')}
+        <div class="uppercase text-[11px] tracking-widest text-stone mt-4 mb-2">Availability</div>
+        <label class="flex items-center gap-2"><input type="checkbox" id="f-stock"> In stock only</label>
+      </div>
+      <div>
+        <div class="uppercase text-[11px] tracking-widest text-stone mb-2">Price up to <span id="price-val">$400</span></div>
+        <input id="f-price" type="range" min="30" max="400" value="400" class="w-full">
+        <button id="apply-filters" class="btn-gold w-full mt-4 py-2.5 text-xs focus-ring">Apply Filters</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function pageShop(params, opts={}){
+  const title = opts.title || 'Shop All';
+  const eyebrow = opts.eyebrow || 'Full collection';
+  let list = PRODUCTS.slice();
+  if(opts.filter) list = list.filter(opts.filter);
+  const q = opts.query;
+  if(q) list = list.filter(p=> p.name.toLowerCase().includes(q.toLowerCase()) || p.category.toLowerCase().includes(q.toLowerCase()));
+
+  const perPage = 8;
+  const page = opts.page||1;
+  const totalPages = Math.max(1, Math.ceil(list.length/perPage));
+  const shown = list.slice((page-1)*perPage, page*perPage);
+
+  return `
+  <section class="max-w-7xl mx-auto px-5 md:px-8 pt-10 pb-4">
+    <div class="text-[11px] tracking-[.25em] uppercase text-gold mb-2">${eyebrow}</div>
+    <h1 class="font-display text-3xl md:text-4xl mb-1">${title}</h1>
+    <p class="text-sm text-stone">${list.length} products</p>
+  </section>
+  ${filterBar({})}
+  <section class="max-w-7xl mx-auto px-5 md:px-8 py-10">
+    ${shown.length? `
+    <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10">
+      ${shown.map(p=>productCard(p)).join('')}
+    </div>` : `<div class="text-center py-24">
+      <p class="font-display text-2xl mb-2">No products match your filters</p>
+      <p class="text-stone text-sm">Try widening your search or clearing filters.</p>
+    </div>`}
+    ${totalPages>1?`
+    <div class="flex justify-center gap-2 mt-14">
+      ${Array.from({length:totalPages}).map((_,i)=>`<a href="#/shop/page/${i+1}" class="w-9 h-9 flex items-center justify-center border hairline text-sm ${page===i+1?'bg-ink text-paper border-ink':''} focus-ring">${i+1}</a>`).join('')}
+    </div>`:''}
+  </section>`;
+}
+
+function bindShopEvents(){
+  const toggle = document.querySelector('[data-sort-toggle]');
+  const panel = document.getElementById('filter-panel');
+  if(toggle) toggle.onclick = ()=> panel.classList.toggle('hidden');
+  const price = document.getElementById('f-price');
+  if(price) price.oninput = ()=> document.getElementById('price-val').textContent = '$'+price.value;
+  const gridBtn = document.getElementById('view-grid'), listBtn=document.getElementById('view-list');
+  const applyBtn = document.getElementById('apply-filters');
+  if(applyBtn) applyBtn.onclick = ()=>{
+    const grid = document.getElementById('product-grid'); if(!grid) return;
+    const cats = [...document.querySelectorAll('.f-cat:checked')].map(c=>c.value);
+    const sizes = [...document.querySelectorAll('.f-size:checked')].map(c=>c.value);
+    const colors = [...document.querySelectorAll('.f-color:checked')].map(c=>c.value);
+    const brands = [...document.querySelectorAll('.f-brand:checked')].map(c=>c.value);
+    const inStock = document.getElementById('f-stock').checked;
+    const maxPrice = +price.value;
+    let list = PRODUCTS.filter(p=>
+      (!cats.length || cats.includes(p.category)) &&
+      (!sizes.length || p.sizes.some(s=>sizes.includes(s))) &&
+      (!colors.length || p.colors.some(c=>colors.includes(c))) &&
+      (!brands.length || brands.includes(p.brand)) &&
+      (!inStock || p.stock>0) &&
+      p.price<=maxPrice
+    );
+    grid.innerHTML = list.length? list.map(p=>productCard(p)).join('') : `<div class="col-span-full text-center py-24"><p class="font-display text-2xl mb-2">No products match your filters</p></div>`;
+    bindWishButtons(grid);
+    toast(`${list.length} products found`);
+  };
+  const sortSel = document.getElementById('sort-select');
+  if(sortSel) sortSel.onchange = ()=>{
+    const grid = document.getElementById('product-grid'); if(!grid) return;
+    let list = PRODUCTS.slice();
+    if(sortSel.value==='price-asc') list.sort((a,b)=>a.price-b.price);
+    else if(sortSel.value==='price-desc') list.sort((a,b)=>b.price-a.price);
+    else if(sortSel.value==='rating') list.sort((a,b)=>b.rating-a.rating);
+    else if(sortSel.value==='popular') list.sort((a,b)=>b.reviewsCount-a.reviewsCount);
+    else list.sort((a,b)=>b.id-a.id);
+    grid.innerHTML = list.slice(0,8).map(p=>productCard(p)).join('');
+    bindWishButtons(grid);
+  };
+  if(gridBtn) gridBtn.onclick = ()=>{
+    const grid = document.getElementById('product-grid'); if(!grid) return;
+    grid.className = 'grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10';
+  };
+  if(listBtn) listBtn.onclick = ()=>{
+    const grid = document.getElementById('product-grid'); if(!grid) return;
+    const ids = [...grid.querySelectorAll('[data-wish]')].map(b=>+b.dataset.wish);
+    grid.className = 'flex flex-col';
+    grid.innerHTML = ids.map(id=>productCard(findProduct(id),'list')).join('');
+    bindWishButtons(grid);
+  };
+}
+
+function pageProduct(id){
+  const p = findProduct(id);
+  if(!p) return `<div class="max-w-7xl mx-auto px-5 py-24 text-center font-display text-2xl">Product not found</div>`;
+  const related = PRODUCTS.filter(r=>r.category===p.category && r.id!==p.id).slice(0,4);
+  return `
+  <section class="max-w-7xl mx-auto px-5 md:px-8 py-8">
+    <nav class="text-xs text-stone uppercase tracking-widest mb-8">
+      <a href="#/shop" class="hover:text-gold">Shop</a> / <a href="#/category/${p.category}" class="hover:text-gold">${p.category}</a> / <span class="text-char dark:text-white">${p.name}</span>
+    </nav>
+    <div class="grid md:grid-cols-2 gap-10 md:gap-16">
+      <div>
+        <div class="zoom-wrap aspect-[4/5] bg-hair/40 overflow-hidden mb-3">
+          <img id="pd-main-img" src="${p.images[0]}" alt="${p.name}" class="zoom-img w-full h-full object-cover">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          ${p.images.map((im,i)=>`<button data-thumb="${im}" class="aspect-[4/5] overflow-hidden bg-hair/40 focus-ring"><img src="${im}" alt="${p.name} view ${i+1}" class="w-full h-full object-cover"></button>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="text-[11px] uppercase tracking-widest text-stone">${p.brand} · SKU ${p.sku}</div>
+        <h1 class="font-display text-3xl md:text-4xl mt-2 mb-3">${p.name}</h1>
+        <div class="flex items-center gap-2 mb-4">${stars(p.rating)}<span class="text-sm text-stone">${p.rating} (${p.reviewsCount} reviews)</span></div>
+        <div class="flex items-center gap-3 mb-6">
+          <span class="font-display text-2xl">${fmt(p.price)}</span>
+          ${p.compareAt?`<span class="text-stone line-through">${fmt(p.compareAt)}</span><span class="text-xs uppercase tracking-widest text-gold">Save ${Math.round((1-p.price/p.compareAt)*100)}%</span>`:''}
+        </div>
+        <p class="text-stone leading-relaxed mb-6">${p.description}</p>
+
+        <div class="mb-6">
+          <div class="text-[11px] uppercase tracking-widest text-stone mb-2">Colour</div>
+          <div class="flex gap-2" id="pd-colors">
+            ${p.colors.map((c,i)=>`<button data-color="${c}" class="pd-color-btn px-3.5 py-2 border hairline text-xs uppercase tracking-widest focus-ring ${i===0?'bg-ink text-paper border-ink':''}">${c}</button>`).join('')}
+          </div>
+        </div>
+        <div class="mb-6">
+          <div class="text-[11px] uppercase tracking-widest text-stone mb-2">Size</div>
+          <div class="flex flex-wrap gap-2" id="pd-sizes">
+            ${p.sizes.map((s,i)=>`<button data-size="${s}" class="pd-size-btn w-12 h-11 border hairline text-xs uppercase focus-ring ${i===0?'bg-ink text-paper border-ink':''}">${s}</button>`).join('')}
+          </div>
+          <a href="#" class="text-xs thread inline-block mt-2">Size guide</a>
+        </div>
+
+        <div class="text-xs uppercase tracking-widest mb-6 ${p.stock>0?'text-green-700 dark:text-green-400':'text-red-600'}">
+          ${p.stock>0? (p.stock<10? `Only ${p.stock} left in stock` : 'In stock') : 'Currently out of stock'}
+        </div>
+
+        <div class="flex items-center gap-4 mb-6">
+          <div class="flex items-center border hairline">
+            <button id="pd-qty-minus" class="w-10 h-11 focus-ring" aria-label="Decrease quantity">–</button>
+            <input id="pd-qty" value="1" readonly class="qty-input w-10 text-center bg-transparent">
+            <button id="pd-qty-plus" class="w-10 h-11 focus-ring" aria-label="Increase quantity">+</button>
+          </div>
+          <button id="pd-add-cart" class="btn-gold flex-1 py-3.5 text-sm focus-ring" ${p.stock===0?'disabled style="opacity:.4;cursor:not-allowed;"':''}>${p.stock===0?'Sold Out':'Add to Cart'}</button>
+          <button id="pd-wish" class="border hairline w-12 h-12 flex items-center justify-center focus-ring" aria-label="Add to wishlist">${STATE.wishlist.includes(p.id)?'♥':'♡'}</button>
+        </div>
+        <details class="border-t hairline pt-4 mb-2">
+          <summary class="cursor-pointer text-sm uppercase tracking-widest">Material &amp; Care</summary>
+          <p class="text-sm text-stone mt-3 leading-relaxed">Exterior: premium natural fibre blend. Lining: breathable cotton. Dry clean recommended. Cut and finished in our own workshop with reinforced seams.</p>
+        </details>
+        <details class="border-t hairline pt-4">
+          <summary class="cursor-pointer text-sm uppercase tracking-widest">Shipping &amp; Returns</summary>
+          <p class="text-sm text-stone mt-3 leading-relaxed">Free standard shipping on orders over $150. Easy 30-day returns on unworn items with tags attached.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="mt-20 border-t hairline pt-12 grid md:grid-cols-3 gap-10">
+      <div class="md:col-span-1">
+        <h2 class="font-display text-2xl mb-3">Customer Reviews</h2>
+        <div class="flex items-center gap-2 mb-1">${stars(p.rating)}<span class="text-sm">${p.rating} out of 5</span></div>
+        <p class="text-sm text-stone mb-4">Based on ${p.reviewsCount} reviews</p>
+        <button class="btn-outline px-6 py-3 text-sm focus-ring">Write a Review</button>
+      </div>
+      <div class="md:col-span-2 space-y-6">
+        ${p.reviews.map(r=>`
+        <div class="border-b hairline pb-6">
+          <div class="flex items-center justify-between mb-1"><span class="font-medium">${r.name}</span>${stars(r.rating)}</div>
+          <p class="text-sm text-stone leading-relaxed">${r.text}</p>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    ${related.length?`
+    <div class="mt-20 border-t hairline pt-12">
+      ${sectionHeading('You may also like','Complete the Look')}
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10">${related.map(r=>productCard(r)).join('')}</div>
+    </div>`:''}
+  </section>`;
+}
+
+function bindProductEvents(id){
+  const p = findProduct(id);
+  let selColor = p.colors[0], selSize = p.sizes[0], qty=1;
+  document.querySelectorAll('.pd-color-btn').forEach(b=>b.onclick=()=>{ selColor=b.dataset.color; document.querySelectorAll('.pd-color-btn').forEach(x=>x.className='pd-color-btn px-3.5 py-2 border hairline text-xs uppercase tracking-widest focus-ring'); b.className+=' bg-ink text-paper border-ink'; });
+  document.querySelectorAll('.pd-size-btn').forEach(b=>b.onclick=()=>{ selSize=b.dataset.size; document.querySelectorAll('.pd-size-btn').forEach(x=>x.className='pd-size-btn w-12 h-11 border hairline text-xs uppercase focus-ring'); b.className+=' bg-ink text-paper border-ink'; });
+  document.querySelectorAll('[data-thumb]').forEach(b=>b.onclick=()=>{ document.getElementById('pd-main-img').src = b.dataset.thumb; });
+  const qtyEl = document.getElementById('pd-qty');
+  document.getElementById('pd-qty-minus').onclick = ()=>{ qty=Math.max(1,qty-1); qtyEl.value=qty; };
+  document.getElementById('pd-qty-plus').onclick = ()=>{ qty=Math.min(p.stock||1,qty+1); qtyEl.value=qty; };
+  const addBtn = document.getElementById('pd-add-cart');
+  if(addBtn) addBtn.onclick = ()=> addToCart(p.id, selSize, selColor, qty);
+  document.getElementById('pd-wish').onclick = ()=>{ toggleWishlist(p.id); document.getElementById('pd-wish').textContent = STATE.wishlist.includes(p.id)?'♥':'♡'; };
+}
+
+function pageCart(){
+  if(!STATE.cart.length){
+    return `<section class="max-w-3xl mx-auto px-5 py-28 text-center">
+      <h1 class="font-display text-3xl mb-3">Your bag is empty</h1>
+      <p class="text-stone mb-8">Explore the collection and find something to add.</p>
+      <a href="#/shop" class="btn-gold px-8 py-3.5 text-sm inline-block focus-ring">Continue Shopping</a>
+    </section>`;
+  }
+  const items = STATE.cart.map(i=>({...i, product: findProduct(i.productId)}));
+  const subtotal = items.reduce((s,i)=>s+i.product.price*i.qty,0);
+  return `
+  <section class="max-w-7xl mx-auto px-5 md:px-8 py-12">
+    <h1 class="font-display text-3xl md:text-4xl mb-10">Shopping Bag <span class="text-stone text-xl">(${cartCount()})</span></h1>
+    <div class="grid md:grid-cols-3 gap-12">
+      <div class="md:col-span-2 divide-y hairline border-t border-b hairline">
+        ${items.map((i,idx)=>`
+        <div class="flex gap-5 py-6">
+          <a href="#/product/${i.product.id}" class="w-24 md:w-28 aspect-[4/5] overflow-hidden bg-hair/40 shrink-0"><img src="${i.product.images[0]}" class="w-full h-full object-cover" alt="${i.product.name}"></a>
+          <div class="flex-1 flex flex-col">
+            <div class="flex justify-between gap-2">
+              <div>
+                <a href="#/product/${i.product.id}" class="font-display thread text-base">${i.product.name}</a>
+                <div class="text-xs text-stone uppercase tracking-widest mt-1">${i.color} · ${i.size}</div>
+              </div>
+              <button data-remove="${idx}" class="text-stone hover:text-red-600 focus-ring text-sm" aria-label="Remove item">✕</button>
+            </div>
+            <div class="mt-auto flex items-center justify-between pt-3">
+              <div class="flex items-center border hairline">
+                <button data-qty-minus="${idx}" class="w-9 h-9 focus-ring">–</button>
+                <span class="w-9 text-center text-sm">${i.qty}</span>
+                <button data-qty-plus="${idx}" class="w-9 h-9 focus-ring">+</button>
+              </div>
+              <span class="font-display">${fmt(i.product.price*i.qty)}</span>
+            </div>
+          </div>
+        </div>`).join('')}
+      </div>
+      <div>
+        <div class="border hairline p-6">
+          <h2 class="font-display text-xl mb-5">Order Summary</h2>
+          <div class="flex mb-3">
+            <input id="promo-input" placeholder="Promo code" class="flex-1 border hairline px-3 py-2.5 text-sm bg-transparent focus-ring outline-none">
+            <button id="promo-apply" class="btn-outline px-4 text-xs uppercase tracking-widest ml-2 focus-ring">Apply</button>
+          </div>
+          <p id="promo-msg" class="text-xs text-stone mb-4 min-h-[16px]"></p>
+          <div class="space-y-2 text-sm mb-4">
+            <div class="flex justify-between"><span class="text-stone">Subtotal</span><span id="sum-subtotal">${fmt(subtotal)}</span></div>
+            <div class="flex justify-between"><span class="text-stone">Shipping</span><span id="sum-shipping">${subtotal>150?'Free':fmt(9.5)}</span></div>
+            <div class="flex justify-between" id="sum-discount-row" style="display:none"><span class="text-stone">Discount</span><span id="sum-discount">–</span></div>
+          </div>
+          <div class="flex justify-between font-display text-lg border-t hairline pt-4 mb-6"><span>Total</span><span id="sum-total">${fmt(subtotal + (subtotal>150?0:9.5))}</span></div>
+          <a href="#/checkout" class="btn-gold w-full py-3.5 text-sm text-center block focus-ring">Proceed to Checkout</a>
+          <a href="#/shop" class="text-xs thread block text-center mt-4">Continue Shopping</a>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function bindCartEvents(){
+  document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>removeFromCart(+b.dataset.remove));
+  document.querySelectorAll('[data-qty-minus]').forEach(b=>b.onclick=()=>{ const idx=+b.dataset.qtyMinus; updateCartQty(idx, STATE.cart[idx].qty-1); });
+  document.querySelectorAll('[data-qty-plus]').forEach(b=>b.onclick=()=>{ const idx=+b.dataset.qtyPlus; updateCartQty(idx, STATE.cart[idx].qty+1); });
+  const promoBtn = document.getElementById('promo-apply');
+  if(promoBtn) promoBtn.onclick = ()=>{
+    const code = document.getElementById('promo-input').value.trim().toUpperCase();
+    const msg = document.getElementById('promo-msg');
+    const subtotal = STATE.cart.reduce((s,i)=>s+findProduct(i.productId).price*i.qty,0);
+    if(code==='NOIR10'){
+      const discount = subtotal*0.1;
+      document.getElementById('sum-discount-row').style.display='flex';
+      document.getElementById('sum-discount').textContent = '-'+fmt(discount);
+      const shipping = subtotal>150?0:9.5;
+      document.getElementById('sum-total').textContent = fmt(subtotal-discount+shipping);
+      msg.textContent = 'Code applied — 10% off your order.'; msg.className='text-xs text-green-700 dark:text-green-400 mb-4';
+    } else {
+      msg.textContent = 'Invalid or expired code.'; msg.className='text-xs text-red-600 mb-4';
+    }
+  };
+}
+
+function pageCheckout(){
+  if(!STATE.cart.length) return `<section class="max-w-2xl mx-auto px-5 py-28 text-center"><h1 class="font-display text-3xl mb-3">Nothing to check out</h1><a href="#/shop" class="btn-gold px-8 py-3.5 text-sm inline-block mt-4 focus-ring">Shop Now</a></section>`;
+  const items = STATE.cart.map(i=>({...i, product: findProduct(i.productId)}));
+  const subtotal = items.reduce((s,i)=>s+i.product.price*i.qty,0);
+  const shipping = subtotal>150?0:9.5;
+  return `
+  <section class="max-w-7xl mx-auto px-5 md:px-8 py-12">
+    <div class="flex items-center gap-3 mb-10 text-xs uppercase tracking-widest text-stone">
+      <span class="text-char dark:text-white">1. Bag</span><span class="w-8 h-px bg-gold"></span>
+      <span class="text-char dark:text-white">2. Details</span><span class="w-8 h-px bg-hair"></span>
+      <span>3. Payment</span><span class="w-8 h-px bg-hair"></span><span>4. Confirmation</span>
+    </div>
+    <div class="grid md:grid-cols-3 gap-12">
+      <form id="checkout-form" class="md:col-span-2 space-y-10">
+        ${!STATE.user?`
+        <div class="border hairline p-5 flex items-center justify-between text-sm">
+          <span>Have an account? <a href="#/account" class="thread text-goldd dark:text-gold">Log in</a> for faster checkout.</span>
+          <span class="text-stone">or continue as guest</span>
+        </div>`:`<div class="text-sm text-stone">Checking out as <span class="text-char dark:text-white">${STATE.user.email}</span></div>`}
+
+        <div>
+          <h2 class="font-display text-xl mb-4">Contact &amp; Shipping</h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <input required placeholder="First name" class="border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+            <input required placeholder="Last name" class="border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+            <input required type="email" placeholder="Email" class="sm:col-span-2 border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none" value="${STATE.user?.email||''}">
+            <input required placeholder="Address" class="sm:col-span-2 border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+            <input required placeholder="City" class="border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+            <input required placeholder="Postal code" class="border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+            <input required placeholder="Country" class="border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+            <input required placeholder="Phone number" class="border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+          </div>
+        </div>
+
+        <div>
+          <h2 class="font-display text-xl mb-4">Payment Method</h2>
+          <div class="grid sm:grid-cols-3 gap-3">
+            ${['Stripe (Card)','PayPal','Apple Pay','Google Pay','Flutterwave','Paystack'].map((m,i)=>`
+            <label class="border hairline p-4 text-sm flex items-center gap-3 cursor-pointer has-[:checked]:border-gold">
+              <input type="radio" name="pay" value="${m}" ${i===0?'checked':''} class="accent-[#B8935A]"> ${m}
+            </label>`).join('')}
+          </div>
+          <div class="mt-4 grid sm:grid-cols-2 gap-4" id="card-fields">
+            <input placeholder="Card number" class="sm:col-span-2 border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+            <input placeholder="MM / YY" class="border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+            <input placeholder="CVC" class="border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+          </div>
+          <p class="text-xs text-stone mt-3 flex items-center gap-1.5">🔒 Payments are encrypted and processed securely. This demo does not move real funds.</p>
+        </div>
+
+        <button type="submit" class="btn-gold w-full py-4 text-sm focus-ring">Place Order — ${fmt(subtotal+shipping)}</button>
+      </form>
+
+      <div>
+        <div class="border hairline p-6">
+          <h2 class="font-display text-xl mb-5">Order Summary</h2>
+          <div class="space-y-4 mb-5 max-h-64 overflow-auto pr-1">
+            ${items.map(i=>`<div class="flex gap-3 text-sm">
+              <div class="w-14 h-16 bg-hair/40 overflow-hidden shrink-0"><img src="${i.product.images[0]}" class="w-full h-full object-cover"></div>
+              <div class="flex-1"><div>${i.product.name}</div><div class="text-xs text-stone">${i.color} · ${i.size} · Qty ${i.qty}</div></div>
+              <div>${fmt(i.product.price*i.qty)}</div>
+            </div>`).join('')}
+          </div>
+          <div class="space-y-2 text-sm border-t hairline pt-4">
+            <div class="flex justify-between"><span class="text-stone">Subtotal</span><span>${fmt(subtotal)}</span></div>
+            <div class="flex justify-between"><span class="text-stone">Shipping</span><span>${shipping===0?'Free':fmt(shipping)}</span></div>
+            <div class="flex justify-between font-display text-lg border-t hairline pt-3 mt-2"><span>Total</span><span>${fmt(subtotal+shipping)}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function bindCheckoutEvents(){
+  const form = document.getElementById('checkout-form');
+  if(!form) return;
+  form.onsubmit = async (e)=>{
+    e.preventDefault();
+    const submitBtn = form.querySelector('button[type=submit]');
+    const label = submitBtn.textContent;
+    submitBtn.disabled = true; submitBtn.textContent = 'Processing…';
+
+    const items = STATE.cart.map(i=>({...i, product: findProduct(i.productId)}));
+    const subtotal = items.reduce((s,i)=>s+i.product.price*i.qty,0);
+    const shipping = subtotal>150?0:9.5;
+    const payMethod = form.querySelector('input[name=pay]:checked').value;
+    const isStripe = payMethod.startsWith('Stripe');
+
+    const order = await STORE.placeOrder({
+      items: items.map(i=>({ productId:i.product.id, name:i.product.name, price:i.product.price, size:i.size, color:i.color, qty:i.qty })),
+      subtotal, shipping, total: subtotal + shipping, paymentMethod: payMethod,
+      status: isStripe ? 'Pending Payment' : 'Processing'
+    });
+
+    if(isStripe){
+      try{
+        const res = await fetch('/api/create-checkout-session', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            items: order.items, orderId: order.id,
+            successUrl: window.location.origin + window.location.pathname + `?session_id={CHECKOUT_SESSION_ID}#/order-confirmation/${order.id}`,
+            cancelUrl: window.location.origin + window.location.pathname + '#/checkout'
+          })
+        });
+        if(!res.ok) throw new Error('API not available');
+        const data = await res.json();
+        if(!data.url) throw new Error(data.error || 'Could not start Stripe checkout');
+        window.location.href = data.url;
+        return;
+      } catch(err){
+        toast('Stripe isn\'t deployed/configured yet — showing a demo confirmation instead.');
+      }
+    }
+    STATE.cart = []; renderNav();
+    location.hash = '#/order-confirmation/'+order.id;
+  };
+}
+
+function pageOrderConfirmation(orderId){
+  return `
+  <section class="max-w-2xl mx-auto px-5 py-28 text-center">
+    <div class="w-16 h-16 rounded-full border border-gold text-gold flex items-center justify-center mx-auto mb-6 text-2xl">✓</div>
+    <div class="text-[11px] tracking-[.25em] uppercase text-gold mb-3">Order confirmed</div>
+    <h1 class="font-display text-3xl md:text-4xl mb-4">Thank you for your order</h1>
+    <p class="text-stone mb-2">Order <span class="text-char dark:text-white">#${orderId}</span> has been placed successfully.</p>
+    <p class="text-stone mb-2">A confirmation email is on its way. You can track your order status any time.</p>
+    <div id="payment-verify"></div>
+    <p class="text-stone mb-8"></p>
+    <div class="flex justify-center gap-4 flex-wrap">
+      <a href="#/order-tracking" class="btn-gold px-8 py-3.5 text-sm focus-ring">Track Order</a>
+      <a href="#/shop" class="btn-outline px-8 py-3.5 text-sm focus-ring">Continue Shopping</a>
+    </div>
+  </section>`;
+}
+
+function pageOrderTracking(){
+  return `
+  <section class="max-w-2xl mx-auto px-5 py-20">
+    <div class="text-[11px] tracking-[.25em] uppercase text-gold mb-2 text-center">Where's my order</div>
+    <h1 class="font-display text-3xl md:text-4xl mb-8 text-center">Track Your Order</h1>
+    <form id="track-form" class="flex flex-col sm:flex-row gap-3 mb-12">
+      <input required placeholder="Order number (e.g. AN-482913)" class="flex-1 border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+      <input required type="email" placeholder="Email used for order" class="flex-1 border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+      <button class="btn-gold px-6 py-3 text-sm focus-ring">Track</button>
+    </form>
+    <div id="track-result" class="hidden">
+      <div class="flex justify-between text-xs uppercase tracking-widest mb-3">
+        <span>Order Placed</span><span>Processing</span><span>Shipped</span><span>Delivered</span>
+      </div>
+      <div class="h-1 bg-hair relative mb-10">
+        <div class="h-1 bg-gold" style="width:55%"></div>
+      </div>
+      <div class="border hairline p-6 text-sm space-y-2">
+        <div class="flex justify-between"><span class="text-stone">Status</span><span>In transit — estimated in 2 days</span></div>
+        <div class="flex justify-between"><span class="text-stone">Carrier</span><span>DHL Express</span></div>
+        <div class="flex justify-between"><span class="text-stone">Tracking No.</span><span>DHL9284710NG</span></div>
+      </div>
+    </div>
+  </section>`;
+}
+function bindTrackEvents(){
+  const f = document.getElementById('track-form');
+  if(f) f.onsubmit = (e)=>{ e.preventDefault(); document.getElementById('track-result').classList.remove('hidden'); };
+}
+
+function pageAbout(){
+  return `
+  <section class="max-w-5xl mx-auto px-5 md:px-8 py-16 md:py-24">
+    <div class="text-[11px] tracking-[.25em] uppercase text-gold mb-3">Our story</div>
+    <h1 class="font-display text-4xl md:text-5xl mb-8 max-w-2xl">Made with intention, worn for years.</h1>
+    <div class="grid md:grid-cols-2 gap-10 items-center mb-16">
+      <img src="${img('about1',900,700)}" class="w-full aspect-[4/3] object-cover grayscale-[.15]" alt="Atelier Noir workshop">
+      <p class="text-stone leading-relaxed">Atelier Noir began as a small workshop dedicated to a simple idea: clothing should be built to outlast trends. Every piece starts with honest material — wool, silk, organic cotton — and is finished by hand in limited runs, so quality never gets sacrificed for speed. We work with a small network of mills and makers who share our standard for craft, and we design every collection to move seamlessly between seasons and settings.</p>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-8 text-center">
+      ${[['Considered Materials','Responsibly sourced wool, silk and organic cotton in every collection.'],['Small Batch Runs','Limited production keeps quality high and waste low.'],['Made to Last','Reinforced construction designed for years of wear, not one season.']].map(([t,d])=>`
+      <div><div class="font-display text-xl mb-2">${t}</div><p class="text-sm text-stone">${d}</p></div>`).join('')}
+    </div>
+  </section>`;
+}
+
+function pageContact(){
+  return `
+  <section class="max-w-5xl mx-auto px-5 md:px-8 py-16 md:py-24 grid md:grid-cols-2 gap-12">
+    <div>
+      <div class="text-[11px] tracking-[.25em] uppercase text-gold mb-3">Get in touch</div>
+      <h1 class="font-display text-4xl mb-6">Contact Us</h1>
+      <p class="text-stone mb-8 leading-relaxed">Our team typically responds within one business day. For order-specific questions, include your order number.</p>
+      <div class="space-y-3 text-sm">
+        <div><span class="text-stone">Email</span><br>care@ateliernoir.example</div>
+        <div><span class="text-stone">Phone</span><br>+234 800 000 0000</div>
+        <div><span class="text-stone">Hours</span><br>Mon–Fri, 9am–6pm WAT</div>
+      </div>
+    </div>
+    <form id="contact-form" class="space-y-4">
+      <input required placeholder="Full name" class="w-full border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+      <input required type="email" placeholder="Email" class="w-full border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+      <input placeholder="Order number (optional)" class="w-full border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+      <textarea required placeholder="Message" rows="5" class="w-full border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none"></textarea>
+      <button class="btn-gold px-8 py-3.5 text-sm focus-ring">Send Message</button>
+    </form>
+  </section>`;
+}
+
+function pageFAQ(){
+  const faqs = [
+    ['What is your return policy?','We accept returns within 30 days of delivery on unworn items with original tags attached. Refunds are issued to your original payment method within 5–7 business days of us receiving the item.'],
+    ['How long does shipping take?','Standard shipping takes 3–7 business days depending on your location. Express options are available at checkout.'],
+    ['Do you ship internationally?','Yes, we ship to most countries. Duties and taxes are calculated at checkout where applicable.'],
+    ['How do I find my size?','Each product page includes a size guide link with detailed measurements. If you are between sizes, we generally recommend sizing up.'],
+    ['What payment methods do you accept?','We accept Stripe (all major cards), PayPal, Apple Pay, Google Pay, Flutterwave and Paystack.'],
+    ['How can I track my order?','Use the Track Order page with your order number and the email used at checkout.'],
+  ];
+  return `
+  <section class="max-w-3xl mx-auto px-5 md:px-8 py-16 md:py-24">
+    <div class="text-[11px] tracking-[.25em] uppercase text-gold mb-3 text-center">Support</div>
+    <h1 class="font-display text-4xl mb-10 text-center">Frequently Asked Questions</h1>
+    <div class="divide-y hairline border-t border-b hairline">
+      ${faqs.map(([q,a])=>`
+      <details class="py-5 group">
+        <summary class="cursor-pointer list-none flex justify-between items-center font-display text-lg">${q}<span class="text-gold group-open:rotate-45 transition-transform text-xl">+</span></summary>
+        <p class="text-stone mt-3 leading-relaxed text-sm">${a}</p>
+      </details>`).join('')}
+    </div>
+  </section>`;
+}
+
+function pageWishlist(){
+  const items = PRODUCTS.filter(p=>STATE.wishlist.includes(p.id));
+  if(!items.length) return `<section class="max-w-2xl mx-auto px-5 py-28 text-center"><h1 class="font-display text-3xl mb-3">Your wishlist is empty</h1><a href="#/shop" class="btn-gold px-8 py-3.5 text-sm inline-block mt-4 focus-ring">Discover Products</a></section>`;
+  return `<section class="max-w-7xl mx-auto px-5 md:px-8 py-12">
+    <h1 class="font-display text-3xl md:text-4xl mb-10">Your Wishlist</h1>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10">${items.map(p=>productCard(p)).join('')}</div>
+  </section>`;
+}
+
+function pageAccount(tab='overview'){
+  if(!STATE.user){
+    return `
+    <section class="max-w-md mx-auto px-5 py-16 md:py-24">
+      <div class="flex border-b hairline mb-8">
+        <button data-auth-tab="login" class="auth-tab flex-1 py-3 text-sm uppercase tracking-widest border-b-2 border-ink dark:border-white">Log In</button>
+        <button data-auth-tab="register" class="auth-tab flex-1 py-3 text-sm uppercase tracking-widest border-b-2 border-transparent text-stone">Register</button>
+      </div>
+      <form id="login-form" class="space-y-4">
+        <input required type="email" id="login-email" placeholder="Email" class="w-full border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+        <input required type="password" id="login-pass" placeholder="Password" class="w-full border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+        <button class="btn-gold w-full py-3.5 text-sm focus-ring">Log In</button>
+        <p class="text-xs text-stone text-center">Demo auth — any email/password combination works.</p>
+      </form>
+      <form id="register-form" class="space-y-4 hidden">
+        <input required id="reg-name" placeholder="Full name" class="w-full border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+        <input required type="email" id="reg-email" placeholder="Email" class="w-full border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+        <input required type="password" id="reg-pass" placeholder="Password" class="w-full border hairline px-4 py-3 text-sm bg-transparent focus-ring outline-none">
+        <button class="btn-gold w-full py-3.5 text-sm focus-ring">Create Account</button>
+      </form>
+    </section>`;
+  }
+  const tabs = [['overview','Overview'],['orders','Order History'],['addresses','Addresses'],['wishlist','Wishlist']];
+  const sampleOrders = [
+    {id:'AN-482913', date:'Jul 2, 2026', status:'Delivered', total:284.00},
+    {id:'AN-471820', date:'Jun 14, 2026', status:'Shipped', total:129.00},
+    {id:'AN-460355', date:'May 29, 2026', status:'Delivered', total:412.50},
+  ];
+  return `
+  <section class="max-w-6xl mx-auto px-5 md:px-8 py-12 grid md:grid-cols-4 gap-10">
+    <aside>
+      <div class="font-display text-xl mb-1">${STATE.user.name}</div>
+      <div class="text-sm text-stone mb-6">${STATE.user.email}</div>
+      <nav class="flex md:flex-col gap-1 text-sm uppercase tracking-widest overflow-x-auto">
+        ${tabs.map(([id,label])=>`<a href="#/account/${id}" class="px-3 py-2.5 ${tab===id?'bg-ink text-paper dark:bg-white dark:text-ink':'hover:bg-hair/40'} whitespace-nowrap">${label}</a>`).join('')}
+        <button id="signout-btn" class="text-left px-3 py-2.5 text-red-600 hover:bg-hair/40">Sign Out</button>
+      </nav>
+    </aside>
+    <div class="md:col-span-3">
+      ${tab==='overview'?`
+        <h1 class="font-display text-2xl md:text-3xl mb-6">Welcome back, ${STATE.user.name.split(' ')[0]}</h1>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="border hairline p-5"><div class="text-2xl font-display">${sampleOrders.length}</div><div class="text-xs text-stone uppercase tracking-widest mt-1">Orders</div></div>
+          <div class="border hairline p-5"><div class="text-2xl font-display">${STATE.wishlist.length}</div><div class="text-xs text-stone uppercase tracking-widest mt-1">Wishlist Items</div></div>
+          <div class="border hairline p-5"><div class="text-2xl font-display">${cartCount()}</div><div class="text-xs text-stone uppercase tracking-widest mt-1">In Bag</div></div>
+        </div>`:''}
+      ${tab==='orders'?`
+        <h1 class="font-display text-2xl md:text-3xl mb-6">Order History</h1>
+        <div class="border hairline divide-y hairline">
+          ${sampleOrders.map(o=>`<div class="flex flex-wrap justify-between gap-2 p-5 text-sm">
+            <span class="w-24">${o.id}</span><span class="text-stone">${o.date}</span>
+            <span class="uppercase tracking-widest text-xs px-2 py-1 border hairline self-start">${o.status}</span>
+            <span>${fmt(o.total)}</span><a href="#/order-tracking" class="thread">Track</a>
+          </div>`).join('')}
+        </div>`:''}
+      ${tab==='addresses'?`
+        <h1 class="font-display text-2xl md:text-3xl mb-6">Saved Addresses</h1>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="border hairline p-5 text-sm"><div class="font-medium mb-1">Home</div><p class="text-stone">14 Admiralty Way<br>Lekki Phase 1, Lagos<br>Nigeria</p></div>
+          <button class="border border-dashed hairline p-5 text-sm text-stone">+ Add new address</button>
+        </div>`:''}
+      ${tab==='wishlist'? pageWishlist().replace(/<section[^>]*>/,'').replace('</section>','').replace(/<h1[^>]*>.*?<\/h1>/,'') :''}
+    </div>
+  </section>`;
+}
+
+function bindAccountEvents(){
+  document.querySelectorAll('[data-auth-tab]').forEach(btn=>{
+    btn.onclick = ()=>{
+      document.querySelectorAll('[data-auth-tab]').forEach(b=>b.className='auth-tab flex-1 py-3 text-sm uppercase tracking-widest border-b-2 border-transparent text-stone');
+      btn.className = 'auth-tab flex-1 py-3 text-sm uppercase tracking-widest border-b-2 border-ink dark:border-white';
+      document.getElementById('login-form').classList.toggle('hidden', btn.dataset.authTab!=='login');
+      document.getElementById('register-form').classList.toggle('hidden', btn.dataset.authTab!=='register');
+    };
+  });
+  const lf = document.getElementById('login-form');
+  if(lf) lf.onsubmit = async (e)=>{
+    e.preventDefault();
+    const btn = lf.querySelector('button'); const label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Signing in…';
+    try{
+      await STORE.signIn(document.getElementById('login-email').value, document.getElementById('login-pass').value);
+      toast('Welcome back'); go('#/account');
+    } catch(err){ toast(err.message.replace('Firebase: ','')); btn.disabled=false; btn.textContent=label; }
+  };
+  const rf = document.getElementById('register-form');
+  if(rf) rf.onsubmit = async (e)=>{
+    e.preventDefault();
+    const btn = rf.querySelector('button'); const label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Creating account…';
+    try{
+      await STORE.register(document.getElementById('reg-name').value, document.getElementById('reg-email').value, document.getElementById('reg-pass').value);
+      toast('Account created'); go('#/account');
+    } catch(err){ toast(err.message.replace('Firebase: ','')); btn.disabled=false; btn.textContent=label; }
+  };
+  const so = document.getElementById('signout-btn');
+  if(so) so.onclick = async ()=>{ await STORE.signOut(); go('#/account'); };
+}
+
+/* ---------------------------- ADMIN ---------------------------- */
+function adminShell(active, content){
+  const items = [['dashboard','Dashboard'],['products','Products'],['categories','Categories'],['inventory','Inventory'],['customers','Customers'],['orders','Orders'],['analytics','Sales Analytics'],['discounts','Discounts & Coupons']];
+  return `
+  <div class="bg-paper dark:bg-ink min-h-screen">
+  <div class="max-w-[1600px] mx-auto grid md:grid-cols-[220px_1fr]">
+    <aside class="border-r hairline p-5 md:min-h-screen">
+      <a href="#/home" class="font-display text-lg tracking-widest block mb-8">← ATELIER NOIR</a>
+      <nav class="flex md:flex-col gap-1 text-sm overflow-x-auto">
+        ${items.map(([id,label])=>`<a href="#/admin/${id}" class="px-3 py-2.5 whitespace-nowrap ${active===id?'bg-ink text-paper dark:bg-white dark:text-ink':'hover:bg-hair/40'}">${label}</a>`).join('')}
+      </nav>
+    </aside>
+    <div class="p-6 md:p-10">${content}</div>
+  </div>
+  </div>`;
+}
+
+function adminStat(label, value, sub){
+  return `<div class="border hairline p-5"><div class="text-xs uppercase tracking-widest text-stone mb-2">${label}</div><div class="font-display text-3xl">${value}</div>${sub?`<div class="text-xs text-green-700 dark:text-green-400 mt-1">${sub}</div>`:''}</div>`;
+}
+
+function barChart(data, max){
+  return `<div class="flex items-end gap-2 h-40">${data.map(d=>`
+    <div class="flex-1 flex flex-col items-center gap-2">
+      <div class="w-full bg-hair dark:bg-white/10 relative" style="height:100%">
+        <div class="absolute bottom-0 left-0 right-0 bg-gold" style="height:${Math.round(d.v/max*100)}%"></div>
+      </div>
+      <span class="text-[10px] text-stone">${d.k}</span>
+    </div>`).join('')}</div>`;
+}
+
+function pageAdmin(section='dashboard'){
+  const revenueData = [{k:'Feb',v:18200},{k:'Mar',v:21400},{k:'Apr',v:19800},{k:'May',v:24600},{k:'Jun',v:27300},{k:'Jul',v:22100}];
+  const maxRev = Math.max(...revenueData.map(d=>d.v));
+
+  if(section==='dashboard' || section==='analytics'){
+    return adminShell(section, `
+      <h1 class="font-display text-2xl md:text-3xl mb-2">${section==='analytics'?'Sales Analytics':'Dashboard'}</h1>
+      <p class="text-stone text-sm mb-8">Overview of store performance. Connect a database to replace this sample data.</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        ${adminStat('Revenue (30d)', '$27,300', '+12.4% vs prior period')}
+        ${adminStat('Orders (30d)', '318', '+6.1%')}
+        ${adminStat('Avg. Order Value', fmt(85.85), '+3.9%')}
+        ${adminStat('Conversion Rate', '3.2%', '+0.4pt')}
+      </div>
+      <div class="border hairline p-6 mb-10">
+        <div class="text-sm uppercase tracking-widest text-stone mb-6">Revenue, last 6 months</div>
+        ${barChart(revenueData, maxRev)}
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="border hairline p-6">
+          <div class="text-sm uppercase tracking-widest text-stone mb-4">Top Products</div>
+          <div class="divide-y hairline">
+            ${PRODUCTS.filter(p=>p.isBest).slice(0,5).map(p=>`<div class="flex justify-between py-2.5 text-sm"><span>${p.name}</span><span class="text-stone">${fmt(p.price)}</span></div>`).join('')}
+          </div>
+        </div>
+        <div class="border hairline p-6">
+          <div class="text-sm uppercase tracking-widest text-stone mb-4">Low Stock Alerts</div>
+          <div class="divide-y hairline">
+            ${PRODUCTS.filter(p=>p.stock>0 && p.stock<10).slice(0,5).map(p=>`<div class="flex justify-between py-2.5 text-sm"><span>${p.name}</span><span class="text-gold">${p.stock} left</span></div>`).join('')}
+          </div>
+        </div>
+      </div>`);
+  }
+
+  if(section==='products'){
+    return adminShell('products', `
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="font-display text-2xl md:text-3xl">Products</h1>
+        <button class="btn-gold px-5 py-2.5 text-sm focus-ring">+ Add Product</button>
+      </div>
+      <div class="border hairline overflow-auto">
+        <table class="w-full text-sm min-w-[640px]">
+          <thead class="text-left uppercase text-xs tracking-widest text-stone border-b hairline">
+            <tr><th class="p-3">Product</th><th class="p-3">SKU</th><th class="p-3">Category</th><th class="p-3">Price</th><th class="p-3">Stock</th><th class="p-3">Status</th></tr>
+          </thead>
+          <tbody class="divide-y hairline">
+            ${PRODUCTS.slice(0,14).map(p=>`<tr>
+              <td class="p-3 flex items-center gap-3"><img src="${p.images[0]}" class="w-9 h-11 object-cover"> ${p.name}</td>
+              <td class="p-3 text-stone">${p.sku}</td><td class="p-3">${p.category}</td><td class="p-3">${fmt(p.price)}</td>
+              <td class="p-3">${p.stock}</td>
+              <td class="p-3">${p.stock>0?'<span class="text-green-700 dark:text-green-400">Active</span>':'<span class="text-red-600">Out of stock</span>'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`);
+  }
+
+  if(section==='categories'){
+    return adminShell('categories', `
+      <h1 class="font-display text-2xl md:text-3xl mb-6">Categories</h1>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        ${CATEGORIES.map(c=>`<div class="border hairline p-5"><div class="font-display text-lg mb-1">${c}</div><div class="text-sm text-stone">${PRODUCTS.filter(p=>p.category===c).length} products</div></div>`).join('')}
+      </div>`);
+  }
+
+  if(section==='inventory'){
+    return adminShell('inventory', `
+      <h1 class="font-display text-2xl md:text-3xl mb-6">Inventory</h1>
+      <div class="border hairline overflow-auto">
+        <table class="w-full text-sm min-w-[560px]">
+          <thead class="text-left uppercase text-xs tracking-widest text-stone border-b hairline"><tr><th class="p-3">SKU</th><th class="p-3">Product</th><th class="p-3">In Stock</th><th class="p-3">Reorder Level</th><th class="p-3">Status</th></tr></thead>
+          <tbody class="divide-y hairline">
+            ${PRODUCTS.slice(0,14).map(p=>`<tr><td class="p-3 text-stone">${p.sku}</td><td class="p-3">${p.name}</td><td class="p-3">${p.stock}</td><td class="p-3">10</td>
+            <td class="p-3">${p.stock===0?'<span class="text-red-600">Restock needed</span>':p.stock<10?'<span class="text-gold">Low</span>':'<span class="text-green-700 dark:text-green-400">Healthy</span>'}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`);
+  }
+
+  if(section==='customers'){
+    const names = ['Amara Obi','Daniel Kim','Priya Sharma','Tunde Adeyemi','Grace Lin','Michael Brooks','Chidinma Eze','Sam Owusu'];
+    return adminShell('customers', `
+      <h1 class="font-display text-2xl md:text-3xl mb-6">Customers</h1>
+      <div class="border hairline overflow-auto">
+        <table class="w-full text-sm min-w-[560px]">
+          <thead class="text-left uppercase text-xs tracking-widest text-stone border-b hairline"><tr><th class="p-3">Name</th><th class="p-3">Email</th><th class="p-3">Orders</th><th class="p-3">Lifetime Value</th></tr></thead>
+          <tbody class="divide-y hairline">
+            ${names.map((n,i)=>`<tr><td class="p-3">${n}</td><td class="p-3 text-stone">${n.toLowerCase().replace(' ','.')}@example.com</td><td class="p-3">${2+i%6}</td><td class="p-3">${fmt(180+i*63.4)}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`);
+  }
+
+  if(section==='orders'){
+    const statuses = ['Processing','Shipped','Delivered','Cancelled'];
+    return adminShell('orders', `
+      <h1 class="font-display text-2xl md:text-3xl mb-6">Orders</h1>
+      <div class="border hairline overflow-auto">
+        <table class="w-full text-sm min-w-[600px]">
+          <thead class="text-left uppercase text-xs tracking-widest text-stone border-b hairline"><tr><th class="p-3">Order</th><th class="p-3">Customer</th><th class="p-3">Date</th><th class="p-3">Total</th><th class="p-3">Status</th></tr></thead>
+          <tbody class="divide-y hairline">
+            ${Array.from({length:10}).map((_,i)=>`<tr>
+              <td class="p-3">AN-${482913-i*731}</td><td class="p-3 text-stone">customer${i+1}@example.com</td><td class="p-3">Jul ${14-i}, 2026</td>
+              <td class="p-3">${fmt(60+i*27.3)}</td><td class="p-3">${statuses[i%4]}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`);
+  }
+
+  if(section==='discounts'){
+    return adminShell('discounts', `
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="font-display text-2xl md:text-3xl">Discounts &amp; Coupons</h1>
+        <button class="btn-gold px-5 py-2.5 text-sm focus-ring">+ New Coupon</button>
+      </div>
+      <div class="border hairline overflow-auto">
+        <table class="w-full text-sm min-w-[520px]">
+          <thead class="text-left uppercase text-xs tracking-widest text-stone border-b hairline"><tr><th class="p-3">Code</th><th class="p-3">Type</th><th class="p-3">Value</th><th class="p-3">Uses</th><th class="p-3">Status</th></tr></thead>
+          <tbody class="divide-y hairline">
+            <tr><td class="p-3">NOIR10</td><td class="p-3">Percentage</td><td class="p-3">10%</td><td class="p-3">214</td><td class="p-3 text-green-700 dark:text-green-400">Active</td></tr>
+            <tr><td class="p-3">WELCOME15</td><td class="p-3">Percentage</td><td class="p-3">15%</td><td class="p-3">89</td><td class="p-3 text-green-700 dark:text-green-400">Active</td></tr>
+            <tr><td class="p-3">FREESHIP</td><td class="p-3">Free Shipping</td><td class="p-3">—</td><td class="p-3">402</td><td class="p-3 text-stone">Expired</td></tr>
+          </tbody>
+        </table>
+      </div>`);
+  }
+  return '';
+}
+
+async function verifyPayment(sessionId){
+  const el = document.getElementById('payment-verify');
+  if(!el) return;
+  el.innerHTML = `<p class="text-xs text-stone mt-2">Confirming payment with Stripe…</p>`;
+  try{
+    const res = await fetch('/api/verify-session?session_id='+encodeURIComponent(sessionId));
+    if(!res.ok) throw new Error('unavailable');
+    const data = await res.json();
+    el.innerHTML = data.paid
+      ? `<p class="text-sm text-green-700 dark:text-green-400 mt-2">Payment of ${fmt((data.amount_total||0)/100)} confirmed via Stripe.</p>`
+      : `<p class="text-sm text-gold mt-2">Payment not yet confirmed — we'll email you once it clears.</p>`;
+  } catch(e){ el.innerHTML = ''; }
+}
+
+/* ---------------------------- ROUTER ---------------------------- */
+function go(hash){
+  if(!hash) hash = '#/home';
+  const app = document.getElementById('app');
+  const parts = hash.replace('#/','').split('/').filter(Boolean);
+  const route = parts[0] || 'home';
+  let html = '';
+
+  if(route==='home') html = pageHome();
+  else if(route==='shop' && parts[1]==='page') html = pageShop({}, {page:+parts[2]||1});
+  else if(route==='shop') html = pageShop({});
+  else if(route==='category') html = pageShop({}, {title:parts[1], eyebrow:parts[1]+"'s Edit", filter:p=>p.category===parts[1]});
+  else if(route==='new-arrivals') html = pageShop({}, {title:'New Arrivals', eyebrow:'Just landed', filter:p=>p.isNew});
+  else if(route==='best-sellers') html = pageShop({}, {title:'Best Sellers', eyebrow:'Most loved', filter:p=>p.isBest});
+  else if(route==='sale') html = pageShop({}, {title:'Sale', eyebrow:'Limited time', filter:p=>p.onSale});
+  else if(route==='search') html = pageShop({}, {title:'Search Results for "'+decodeURIComponent(parts[1])+'"', eyebrow:'Search', query:decodeURIComponent(parts[1])});
+  else if(route==='product') html = pageProduct(parts[1]);
+  else if(route==='cart') html = pageCart();
+  else if(route==='checkout') html = pageCheckout();
+  else if(route==='order-confirmation') html = pageOrderConfirmation(parts[1]);
+  else if(route==='order-tracking') html = pageOrderTracking();
+  else if(route==='wishlist') html = pageWishlist();
+  else if(route==='account') html = pageAccount(parts[1]||'overview');
+  else if(route==='about') html = pageAbout();
+  else if(route==='contact') html = pageContact();
+  else if(route==='faq') html = pageFAQ();
+  else if(route==='admin') html = pageAdmin(parts[1]||'dashboard');
+  else html = `<div class="max-w-3xl mx-auto px-5 py-28 text-center"><h1 class="font-display text-3xl mb-4">Page not found</h1><a href="#/home" class="thread">Return home</a></div>`;
+
+  app.innerHTML = html;
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant':'auto'});
+  renderNav();
+  bindWishButtons(app);
+
+  if(route==='shop'||route==='category'||route==='new-arrivals'||route==='best-sellers'||route==='sale'||route==='search') bindShopEvents();
+  if(route==='product') bindProductEvents(parts[1]);
+  if(route==='cart') bindCartEvents();
+  if(route==='checkout') bindCheckoutEvents();
+  if(route==='order-tracking') bindTrackEvents();
+  if(route==='order-confirmation'){
+    const sessionId = new URLSearchParams(window.location.search).get('session_id');
+    if(sessionId) verifyPayment(sessionId);
+  }
+  if(route==='account') bindAccountEvents();
+  if(route==='contact'){ const f=document.getElementById('contact-form'); if(f) f.onsubmit=(e)=>{e.preventDefault(); toast('Message sent — we will reply within 1 business day'); f.reset();}; }
+  const nlf = document.getElementById('newsletter-form');
+  if(nlf) nlf.onsubmit = (e)=>{ e.preventDefault(); toast('Subscribed — welcome to Atelier Noir'); nlf.reset(); };
+
+  revealOnScroll();
+}
+
+window.addEventListener('hashchange', ()=>go(location.hash));
+window.addEventListener('DOMContentLoaded', ()=>{ renderNav(); renderFooter(); go(location.hash || '#/home'); });
+</script>
+</body>
+</html>
